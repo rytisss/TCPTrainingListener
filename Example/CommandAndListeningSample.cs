@@ -57,7 +57,8 @@ public class CommandAndListeningSample
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
-            Console.WriteLine("Nothing more to do, closing application!");
+            Console.WriteLine("Nothing more to do, closing application! Press key...");
+            Console.ReadKey();
             return; // nothing more to do
         }
 
