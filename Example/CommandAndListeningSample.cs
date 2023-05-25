@@ -198,6 +198,11 @@ public class CommandAndListeningSample
                 Cv2.ImShow("label", segmentationPrediction.predictions[i].label);
                 Cv2.ImShow("prediction", segmentationPrediction.predictions[i].prediction);
                 Cv2.WaitKey(1000); // wait for 1000ms
+                // show first 5
+                if (i >= 5)
+                {
+                    break;
+                }
             }
             Cv2.DestroyAllWindows();
             Console.WriteLine("Destroying model windows!");
