@@ -153,7 +153,7 @@ public class CommandAndListeningSample
         }
         else if (command == "Statistics")
         {
-            string statisticsPayload = json["Statistics"].ToString(); // take the field with values
+            string statisticsPayload = json["Statistics"].ToString();
             ShowStatistics(statisticsPayload);
         }
         else if (command == "Error")
