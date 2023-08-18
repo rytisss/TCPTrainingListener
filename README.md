@@ -15,4 +15,4 @@ https://github.com/rytisss/TCPTrainingListener/blob/13ccf8c91395e19f417ef5482d30
 
 # Data structures and message handling  
 Messages are handled according to the **Command** field which is a must in the structure. See different messages deserialization:  
-https://github.com/rytisss/TCPTrainingListener/blob/13ccf8c91395e19f417ef5482d308707b27bd0ae/Example/CommandAndListeningSample.cs#L140-L173
+https://github.com/rytisss/TCPTrainingListener/blob/14ee3bea7ca53027b42e9400b9d5462531e2fdae/Example/CommandAndListeningSample.cs#L140-L173
