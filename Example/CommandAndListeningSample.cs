@@ -33,7 +33,7 @@ public class CommandAndListeningSample
     {
         // server address
         string serverIP = "127.0.0.1";
-        int port = 5423; //Listen on different port than request for processing is made
+        int port = 5423;
         string serverAddress = serverIP + ":" + port.ToString();
 
         // create socket instance
