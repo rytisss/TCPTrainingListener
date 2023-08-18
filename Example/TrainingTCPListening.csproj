@@ -91,11 +91,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DetectionXAIResource.cs" />
+    <Compile Include="DetectionXAIPrediction.cs" />
     <Compile Include="ImageDataConverter.cs" />
+    <Compile Include="IterationResults.cs" />
     <Compile Include="PredictionConverter.cs" />
-    <Compile Include="SegmentationImageResource.cs" />
-    <Compile Include="SegmentationPredictionResults.cs" />
-    <Compile Include="PredictionResults.cs" />
+    <Compile Include="SegmentationResource.cs" />
+    <Compile Include="SegmentationPrediction.cs" />
+    <Compile Include="PredictionInfo.cs" />
     <Compile Include="StatisticalResults.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CommandAndListeningSample.cs" />

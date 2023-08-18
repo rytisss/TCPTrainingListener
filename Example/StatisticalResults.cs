@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Communication
 {
@@ -7,6 +6,7 @@ namespace Communication
     /// Structure example for segmentation statistics:
     /// "Statistics": {
     ///  "epoch": 11,
+    ///  "epoch_count" 15,
     ///  "best_weights": false,
     ///  "parameters": {
     ///    "loss": 0.21460704505443573,
@@ -19,9 +19,17 @@ namespace Communication
     class StatisticalResults
     {
         /// <summary>
+        /// Model that is being tought at the moment
+        /// </summary>
+        public string model { get; set; }
+        /// <summary>
         /// Epoch
         /// </summary>
         public int epoch { get; set; }
+        /// <summary>
+        /// Total number of epochs
+        /// </summary>
+        public int epoch_count { get; set; }
         /// <summary>
         /// Flag is this epoch gives the best-performaning weights
         /// </summary>

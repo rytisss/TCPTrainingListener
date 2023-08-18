@@ -4,15 +4,20 @@ using System;
 
 namespace Communication
 {
-    public class PredictionConverter : JsonConverter<PredictionResults>
+    public class PredictionConverter : JsonConverter<PredictionInfo>
     {
-        public override void WriteJson(JsonWriter writer, PredictionResults value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, PredictionInfo value, JsonSerializer serializer)
         {
             switch (value.operation)
             {
                 case "segmentation":
                     {
-                        serializer.Serialize(writer, (SegmentationPredictionResults)value);
+                        serializer.Serialize(writer, (SegmentationPrediction)value);
+                        break;
+                    }
+                case "detectionxai":
+                    {
+                        serializer.Serialize(writer, (DetectionXAIPrediction)value);
                         break;
                     }
                 default:
@@ -23,17 +28,22 @@ namespace Communication
             }
         }
 
-        public override PredictionResults ReadJson(JsonReader reader, Type objectType, PredictionResults existingValue, bool hasExistingValue, JsonSerializer serializer)
+        public override PredictionInfo ReadJson(JsonReader reader, Type objectType, PredictionInfo existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
             JObject jsonObject = JObject.Load(reader);
             var operation = jsonObject["operation"]?.Value<string>();
 
-            PredictionResults prediction;
+            PredictionInfo prediction = null;
             switch (operation)
             {
                 case "segmentation":
                     {
-                        prediction = new SegmentationPredictionResults();
+                        prediction = new SegmentationPrediction();
+                        break;
+                    }
+                case "detectionxai":
+                    {
+                        prediction = new DetectionXAIPrediction();
                         break;
                     }
                 default:

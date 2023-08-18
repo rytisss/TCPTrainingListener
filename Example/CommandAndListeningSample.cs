@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Communication;
 using OpenCvSharp;
-using System.Drawing.Printing;
 
 public class CommandAndListeningSample
 {
@@ -57,8 +56,7 @@ public class CommandAndListeningSample
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
-            Console.WriteLine("Nothing more to do, closing application! Press key...");
-            Console.ReadKey();
+            Console.WriteLine("Nothing more to do, closing application!");
             return; // nothing more to do
         }
 
@@ -143,17 +141,54 @@ public class CommandAndListeningSample
         // Print command
         Console.WriteLine("Command: {0}", command);
 
-        if (command == "Predictions")
+        if (command == "Iteration")
+        {
+            string iterationPayload = json["Iteration"].ToString();
+            ShowIterationInfo(iterationPayload);
+        }
+        else if (command == "Predictions")
         {
             string predictionsPayload = json["Predictions"].ToString();
-            GetPredictions(predictionsPayload);
+            ShowPredictions(predictionsPayload);
         }
         else if (command == "Statistics")
         {
             string statisticsPayload = json["Statistics"].ToString(); // take the field with values
-            GetStatistics(statisticsPayload);
+            ShowStatistics(statisticsPayload);
+        }
+        else if (command == "Error")
+        {
+            string errorMessage = json["Message"].ToString();
+            Console.WriteLine("[Error]: " + errorMessage);
+        }
+        else if (command == "Warning")
+        {
+            string warningMessage = json["Message"].ToString();
+            Console.WriteLine("[Warning]: " + warningMessage);
+        }
+        else if (command == "Info")
+        {
+            string infoMessage = json["Message"].ToString();
+            Console.WriteLine("[Info]: " + infoMessage);
         }
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="iterationPayload"></param>
+    static void ShowIterationInfo(string iterationPayload)
+    {
+        IterationResults iterationsStatistics = JsonConvert.DeserializeObject<IterationResults>(iterationPayload);
+        Console.WriteLine("-----------");
+        Console.WriteLine("Iteration {0} / {1}, from epoch {2}", iterationsStatistics.iteration, iterationsStatistics.iteration_count, iterationsStatistics.epoch);
+        foreach (var entry in iterationsStatistics.parameters)
+        {
+            Console.WriteLine($"{entry.Key}: {entry.Value}");
+        }
+        Console.WriteLine("-----------");
+    }
+
 
     /// <summary>
     /// Extract / deserialized training statistics
@@ -161,14 +196,16 @@ public class CommandAndListeningSample
     /// <param name="statisticsPayload">
     /// JSON as string
     /// </param>
-    static void GetStatistics(string statisticsPayload)
+    static void ShowStatistics(string statisticsPayload)
     {
         StatisticalResults statistics = JsonConvert.DeserializeObject<StatisticalResults>(statisticsPayload);
-        Console.WriteLine("Received training parameters from epoch {0}", statistics.epoch);
+        Console.WriteLine("-----------");
+        Console.WriteLine("Received training parameters from epoch {0} / {1}", statistics.epoch, statistics.epoch_count);
         foreach (var entry in statistics.parameters)
         {
             Console.WriteLine($"{entry.Key}: {entry.Value}");
         }
+        Console.WriteLine("-----------");
     }
 
     /// <summary>
@@ -177,32 +214,40 @@ public class CommandAndListeningSample
     /// <param name="predictionsPayload">
     /// JSON as string
     /// </param>
-    static void GetPredictions(string predictionsPayload)
+    static void ShowPredictions(string predictionsPayload)
     {
         // Deserialization
         var settings = new JsonSerializerSettings
         {
             Converters = new List<JsonConverter> { new PredictionConverter() }
         };
-        var predictions = JsonConvert.DeserializeObject<PredictionResults>(predictionsPayload, settings);
-        // check type and do the following steps accodingly
-        // TODO: more TBD with more options
-        if (predictions is SegmentationPredictionResults)
+        var predictions = JsonConvert.DeserializeObject<PredictionInfo>(predictionsPayload, settings);
+        // check type and do the following steps accodingly to deriviation of of prediction object
+        if (predictions is SegmentationPrediction)
         {
-            Console.WriteLine("Showing prediction from epoch {0}...", predictions.epoch);
-            SegmentationPredictionResults segmentationPrediction = predictions as SegmentationPredictionResults;
+            Console.WriteLine("Showing prediction from epoch {0}/{1}", predictions.epoch, predictions.epoch_count);
+            SegmentationPrediction segmentationPrediction = predictions as SegmentationPrediction;
             // show results in modal windows
             for (int i = 0; i < segmentationPrediction.predictions.Length; i++)
             {
                 Cv2.ImShow("image", segmentationPrediction.predictions[i].image);
                 Cv2.ImShow("label", segmentationPrediction.predictions[i].label);
                 Cv2.ImShow("prediction", segmentationPrediction.predictions[i].prediction);
-                Cv2.WaitKey(1000); // wait for 1000ms
-                // show first 5
-                if (i >= 5)
-                {
-                    break;
-                }
+                Cv2.WaitKey(200); // wait for 200ms
+            }
+            Cv2.DestroyAllWindows();
+            Console.WriteLine("Destroying model windows!");
+        }
+        else if (predictions is DetectionXAIPrediction)
+        {
+            Console.WriteLine("Showing prediction from epoch {0}/{1}", predictions.epoch, predictions.epoch_count);
+            DetectionXAIPrediction detectionXAIPrediction = predictions as DetectionXAIPrediction;
+            // show results in modal windows
+            for (int i = 0; i < detectionXAIPrediction.predictions.Length; i++)
+            {
+                Cv2.ImShow("image", detectionXAIPrediction.predictions[i].image);
+                Console.WriteLine("Label - {0}, prediction - {1}", detectionXAIPrediction.predictions[i].label, detectionXAIPrediction.predictions[i].prediction);
+                Cv2.WaitKey(200); // wait for 200ms
             }
             Cv2.DestroyAllWindows();
             Console.WriteLine("Destroying model windows!");
