@@ -8,7 +8,8 @@ namespace Communication
 {
     /// <summary>
     /// Structure example:
-    /// "Iteration": {
+    /// {
+    /// "model_name": "default",
     ///  "iteration": 11,
     ///  "iteration_count" 30,
     ///  "epoch": 5,
@@ -20,6 +21,10 @@ namespace Communication
     /// </summary>
     public class IterationResults
     {
+        /// <summary>
+        /// Name of the model that is training
+        /// </summary>
+        public string model_name { get; set; }
         /// <summary>
         /// Iteration index
         /// </summary>
@@ -36,5 +41,6 @@ namespace Communication
         /// Other parameters, depends on the training but all the time consists of string key and float value
         /// </summary>
         public Dictionary<string, float> parameters { get; set; }
+
     }
 }

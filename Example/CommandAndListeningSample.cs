@@ -181,6 +181,7 @@ public class CommandAndListeningSample
     {
         IterationResults iterationsStatistics = JsonConvert.DeserializeObject<IterationResults>(iterationPayload);
         Console.WriteLine("-----------");
+        Console.WriteLine("Model name: {0}", iterationsStatistics.model_name);
         Console.WriteLine("Iteration {0} / {1}, from epoch {2}", iterationsStatistics.iteration, iterationsStatistics.iteration_count, iterationsStatistics.epoch);
         foreach (var entry in iterationsStatistics.parameters)
         {
@@ -200,6 +201,7 @@ public class CommandAndListeningSample
     {
         StatisticalResults statistics = JsonConvert.DeserializeObject<StatisticalResults>(statisticsPayload);
         Console.WriteLine("-----------");
+        Console.WriteLine("Model name: {0}", statistics.model_name);
         Console.WriteLine("Received training parameters from epoch {0} / {1}", statistics.epoch, statistics.epoch_count);
         foreach (var entry in statistics.parameters)
         {
@@ -226,6 +228,7 @@ public class CommandAndListeningSample
         if (predictions is SegmentationPrediction)
         {
             Console.WriteLine("Showing prediction from epoch {0}/{1}", predictions.epoch, predictions.epoch_count);
+            Console.WriteLine("Model name: {0}", predictions.model_name);
             SegmentationPrediction segmentationPrediction = predictions as SegmentationPrediction;
             // show results in modal windows
             for (int i = 0; i < segmentationPrediction.predictions.Length; i++)
@@ -241,6 +244,7 @@ public class CommandAndListeningSample
         else if (predictions is DetectionXAIPrediction)
         {
             Console.WriteLine("Showing prediction from epoch {0}/{1}", predictions.epoch, predictions.epoch_count);
+            Console.WriteLine("Model name: {0}", predictions.model_name);
             DetectionXAIPrediction detectionXAIPrediction = predictions as DetectionXAIPrediction;
             // show results in modal windows
             for (int i = 0; i < detectionXAIPrediction.predictions.Length; i++)

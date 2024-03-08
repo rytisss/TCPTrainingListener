@@ -3,6 +3,10 @@
     public class PredictionInfo
     {
         /// <summary>
+        /// Name of the model that is training
+        /// </summary>
+        public string model_name { get; set; }
+        /// <summary>
         /// Epoch number
         /// </summary>
         public int epoch { get; set; }

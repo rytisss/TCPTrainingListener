@@ -4,7 +4,8 @@ namespace Communication
 {
     /// <summary>
     /// Structure example for segmentation statistics:
-    /// "Statistics": {
+    /// {
+    ///  "model_name": "default",
     ///  "epoch": 11,
     ///  "epoch_count" 15,
     ///  "best_weights": false,
@@ -18,6 +19,10 @@ namespace Communication
     /// </summary>
     class StatisticalResults
     {
+        /// <summary>
+        /// Name of the model that is training
+        /// </summary>
+        public string model_name { get; set; }
         /// <summary>
         /// Model that is being tought at the moment
         /// </summary>
